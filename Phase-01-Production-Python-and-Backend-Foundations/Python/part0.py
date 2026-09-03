@@ -15,15 +15,15 @@ Nesting one function inside another. return value of innner fn is argument of an
 flaot() - similar to int, it converts the given string to float
 round() - round the floating point to nearest integer. Takes an optional parameter which decides how many numbers to be there after decimal.
 Expressing numbers using format string :
-   - eg: 1000 can be represented as 1,000 for redability f"{z:,}"
-   - eg: 0.66666 can be rounded to 0.67 w/o round() function. f"{z:.2f}"
+   - eg: z = 1000 can be represented as 1,000 for redability f"{z:,}"
+   - eg: z = 0.66666 can be rounded to 0.67 w/o round() function. f"{z:.2f}"
 Defining a function and convention of using main
 2*3 - multiply, 2**3 -> 2^3, pow(2,3) = 2**3
 '''
 
 '''
 Questions:
-int() - what if our argument is not a number?
+int() - what if our argument is not a number? - value error
 '''
 
 # strings
@@ -70,7 +70,7 @@ def main():
     name = input("What's your name? ")
     hello(name)
 
-def hello(to="World"):
+def hello(name,to="World"): # default parameters are always should be mentioned after the Non-default parameters.
     return print(f"hello {to}")
 
 main()
