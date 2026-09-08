@@ -1,0 +1,35 @@
+1. input = "aaab"
+   pattern = "a*b"
+
+2. input = "aaac"
+   pattern = "a*b"
+
+3. input = "aaab"
+   pattern = "a*ab"
+
+4. input = "abc@def"
+   pattern = ".*@."
+
+5. input = "abc@def@xyz"
+   pattern = ".*@"
+
+6. input = "abc@def@xyz"
+   pattern = ".*?@"
+
+7. input = "jaaaay"
+   pattern = "a*ay"
+
+8. input = "baaab"
+   pattern = "a?"
+
+9. input = "baaaac"
+   pattern = "a*"
+
+10. input = "xx12345yy"
+    pattern = "\d{2,4}"
+
+11. input = "abcdef"
+    pattern = ".{2,4}"
+
+12. input = "xxaaab"
+    pattern = "a*b"

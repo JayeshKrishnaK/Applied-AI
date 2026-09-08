@@ -1,0 +1,102 @@
+### Regex engine rules
+
+1. **`search()` tries the earliest possible starting position.**
+
+2. **Pattern pointer** = which regex instruction is being processed.
+From starting to the patter_pointer-1, all patterns are satisfied
+It can't move to next pattern untill the current pattern satisfies.
+
+3. **Input pointer** = current position in the input. 
+From assumed [starting index to input_pointer-1] all characters are consumed by patterns.
+It can't without a character being consumed.
+
+4. **Greedy quantifier** = consume as much as possible
+   at the current starting position.
+
+5. If something later fails, a **greedy quantifier can backtrack**
+   and give characters back.
+
+6. If the entire attempt fails, `search()` moves to the
+   next starting position and resets the pattern.
+
+7. `*` and `?` can match **ZERO characters**.
+   Therefore, `search()` can sometimes return `""` immediately.
+
+### Laziness
+
+8. **Lazy quantifier** = consume as little as possible
+   at the current starting position.
+
+9. If something later fails, a **lazy quantifier expands**
+   and consumes more characters, step by step.
+
+10. Lazy quantifiers therefore move through their possibilities
+    in the opposite direction from greedy quantifiers:
+
+```text
+GREEDY:
+maximum → less → less → less
+          ↑
+      backtracking
+
+LAZY:
+minimum → more → more → more
+          →
+       expansion
+```
+
+11. If a lazy quantifier reaches its **maximum possible consumption**
+    and the rest of the pattern still fails, that starting position
+    is exhausted.
+
+12. Then `search()` moves to the **next starting position**
+    and starts the whole pattern again.
+
+### Example
+
+```python
+s = "abcdef"
+re.search(r".*?@", s)
+```
+
+At starting position `a`:
+
+```text
+.*? = ""       @ ❌
+.*? = "a"      @ ❌
+.*? = "ab"     @ ❌
+.*? = "abc"    @ ❌
+.*? = "abcd"   @ ❌
+.*? = "abcde"  @ ❌
+.*? = "abcdef" @ ❌
+```
+
+The lazy quantifier has reached its maximum.
+
+So **this attempt is finished**:
+
+```text
+starting position = a
+                    ↓
+"" → "a" → "ab" → "abc" → ... → "abcdef" → FAIL
+```
+
+Then `search()` starts a **new attempt** at `b`:
+
+```text
+b
+"" → "b" → "bc" → "bcd" → ... → "bcdef" → FAIL
+```
+
+Then `c`, then `d`, etc.
+
+### The core rule to memorize
+
+```text
+GREEDY  = maximum first, then give back if necessary
+LAZY    = minimum first, then take more if necessary
+
+SEARCH  = if the whole attempt fails, move starting position right
+```
+
+That's the clean mental model you've been building.
