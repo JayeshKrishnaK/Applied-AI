@@ -3,10 +3,10 @@ import re
 def main():
     # more_generic()
     # re_way()
-    # re_examples()
+    re_examples()
     # format_name()
     # extract_username_from_url()
-    misc()
+    # misc()
 
 def misc():
     s = "apple,;banana;orange"
@@ -15,7 +15,7 @@ def misc():
 
 def extract_username_from_url():
     url = "https://x.com/BillGates?lang=en"
-    pattern = r"^(https?://)?(?:www\.)?x\.com/([a-z0-9_]+).*"
+    pattern = r"^(?:https?://)?(?:www\.)?x\.com/([a-z0-9_]+).*"
 
 def format_name():
     # Task - IF name is entered in isreali way like Kannan,Jayesh Krishna, we need to format it to global way.
@@ -28,10 +28,17 @@ def format_name():
     print(match.groups()[0])
     '''
     name = input("Enter your name: ").strip()
-    pattern = r"^([A-Z][a-z]+) *, *([A-Z][a-z]+) *([A-Z][a-z]+)?" # ?: Cant be used cause I stil need to capture
+    pattern = r"^([A-Za-z]+) *, *([A-Z][a-z]+) *([A-Z][a-z]+)?" # ?: Cant be used cause I stil need to capture
+    '''
+    ([A-Z][a-z]+) Vs ([A-Za-z]+)
+    
+    ([A-Z][a-z]+) - ([Any one charcater of A-Z][Any one charcater of a-z] - 1 or more reps)
+    *** for input Kolla, anuRA it won't find a match at all. it won't enter the blow if conditions
+    ([A-Za-z]+) - ([Any one charcater of A-Z or a-z] - 1 or more reps) - ****RIGHT WAY****
+    '''
     if match := re.search(pattern,name): # use of warlus operator
         nameBreakdown = match.groups()
-        # print(nameBreakdown)
+        print(nameBreakdown)
         '''
         Important:
         Enter your name: Kolla,Anurag

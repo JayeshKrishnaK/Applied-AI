@@ -40,7 +40,7 @@ def main():
         print(f"{x} is odd")
 
 def isEven(n):
-    # return True if n%2 == 0 else False # one liner
-    return n%2 == 0  # simple one liner
+    return True  if n%2 == 0 else False if n%2 != 0 else None# one liner
+    # return n%2 == 0  # simple one liner
 
 main()

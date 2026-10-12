@@ -1,0 +1,21 @@
+[project]
+name = "sample"
+version = "0.1.2"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Jayesh Krishna K", email = "jayeshkrishna.k@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "argparse>=1.4.0",
+]
+
+[project.scripts]
+sample = "sample:main"
+say-hello = "sample.hello.hello:main"
+say-bye = "sample.bye.bye:main"
+
+[build-system]
+requires = ["uv_build>=0.12.4,<0.13.0"]
+build-backend = "uv_build"

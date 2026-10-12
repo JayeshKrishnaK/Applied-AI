@@ -1,2 +1,2 @@
-from .add import add
-from .sub import sub
+from . import add
+from . import sub

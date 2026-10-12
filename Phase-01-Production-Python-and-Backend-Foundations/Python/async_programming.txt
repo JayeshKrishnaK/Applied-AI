@@ -1,0 +1,121 @@
+# Program with asyncio keywords but running synchronously
+
+import asyncio
+
+async def make_tea():
+    print("Boiling water...")
+    await asyncio.sleep(3)
+    print("Tea ready")
+
+async def make_toast():
+    print("Toasting bread...")
+    await asyncio.sleep(2)
+    print("Toast ready")
+
+async def main():
+    await make_tea()
+    await make_toast()
+
+asyncio.run(main())
+
+
+
+
+
+
+# What happens why this output?
+'''
+O/P:
+main() finished
+Boiling water...
+Toasting bread...
+'''
+1. create_task creates a task object and puts it to event loop (Not paused, not started object - which means
+   once the event loop is ready to pick up any other, it can take up these).
+2. the make_tea and make_toast are in this state.
+2. main coroutine is what is running currently and its been waiting oon time.sleep() which is a synchronous sleep.
+4. once done, we get "main() finished".
+5. Now main coroutine is completed and the event loop is free, so it runs these tasks.
+6. In the mean time asyncio.run runs some cleanup by creating a task in event loop. When make_tea and make_toast
+   waiting on async timer, this cleanup runs and wipes out all pending tasks and the event loop itself. 
+   As nothing exists to be ran, program ends.
+
+import asyncio
+import time
+
+async def make_tea():
+    print("Boiling water...")
+    await asyncio.sleep(3)
+    print("Tea ready")
+
+async def make_toast():
+    print("Toasting bread...")
+    await asyncio.sleep(2)
+    print("Toast ready")
+
+async def main():
+    task1 = asyncio.create_task(make_tea())# <- no await here
+    task2 = asyncio.create_task(make_toast())
+    time.sleep(20)
+    print("main() finished")
+
+asyncio.run(main())
+
+
+
+
+
+# Killing a task which was set aside as its waiting for something
+# but this task is not awaited by anyone
+# so when program ends it kills the task and shuts the event loop
+
+def main():
+    # synchronous_programming()
+    asyncio.run(asynchronous_programming())
+
+async def asynchronous_programming():
+    task1 = asyncio.create_task(boil_rice())
+    task2 = asyncio.create_task(cook_veggies())
+    print(await task1)
+
+async def cook_veggies():
+    print("I'm starting to cook veggis")
+    await asyncio.sleep(10)
+    print("I finished coking veggies")   
+
+async def boil_rice():
+    print("I'm starting to boild the rice")
+    await asyncio.sleep(5)
+    print("I finished boiling rice")
+    return "I finished boiling rice"
+
+
+"""
+Very Very Very Important
+
+async def main():
+    print("In main")
+    await make_tea() # A separate entry is not made for it in event loop, it runs in line with teh current coroutine ie., main.
+    # if make_tea() wasn't awaiting on something else on its own, the start to end of make_tea ran immediately.
+
+# What if the make_tea has async timer/ awaiting on socket? - The whole chain of task stops and will be put aside by event loop
+and a new task in queue will be taken up by event loop.
+
+Claude explanation.
+
+Correction: await doesn't hand off to a new coroutine directly
+
+await <coroutine_obj> doesn't pull the coroutine object out and run it as a separate, 
+competing thing on the ready queue. Instead, the awaited coroutine is run inline, 
+as a direct continuation of the current one — think of it like a regular function call: the current coroutine's 
+execution steps into the awaited coroutine and runs its code right there, on the same turn. 
+There's no scheduling decision made and no ready-queue entry created for it. 
+If the awaited coroutine never hits its own await on something else, it runs start-to-finish immediately, 
+and control returns to the line right after the await — no other coroutine gets a turn in between.
+
+The only time an actual pause and a return to the event loop happens is when that awaited coroutine reaches an await on 
+something not-yet-ready — a timer, a socket, or a Task. That's the real pause point, 
+not the initial await itself. This is different from await task1 on a create_task-created Task, 
+which you traced earlier — a Task is scheduled and picked up by the event loop separately, 
+but awaiting a plain coroutine object directly (await make_tea()) just runs it in-place, like a function call.
+"""

@@ -128,3 +128,6 @@ d = {
 print(d) # Output: {1: 'true'}
 # As python treats 1 and True are same, the latest value for the key is updated.
 
+sample = 1
+if sample == True:
+    print("hi")

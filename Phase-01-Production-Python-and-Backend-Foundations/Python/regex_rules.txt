@@ -8,7 +8,7 @@ It can't move to next pattern untill the current pattern satisfies.
 
 3. **Input pointer** = current position in the input. 
 From assumed [starting index to input_pointer-1] all characters are consumed by patterns.
-It can't without a character being consumed.
+It can't move without a character being consumed.
 
 4. **Greedy quantifier** = consume as much as possible
    at the current starting position.

@@ -95,6 +95,8 @@ Questions:
 
 # pass
 # import calculate
+# import sys
+# print(sys.modules) # Entry is been made to sys.modules always by a module's full name. No 'add' key exists. only "calculate.add"
 # print(calculate.add.add(2,3))
 
 # pass
@@ -128,16 +130,17 @@ Questions:
 # from calculate import add
 # print(add(2,3)) #pass
 
+
 # from calculate.add import add
 # print(add(2,3)) # pass
 
-import requests
-import json
-response = requests.get("https://itunes.apple.com/search?entity=song&limit=1&term=arrahman")
+# import requests
+# import json
+# response = requests.get("https://itunes.apple.com/search?entity=song&limit=1&term=arrahman")
 # the above returns the reponse object
 # print(response) #prints the response object
 # print(response.headers)
 # print(response.text) # JSON Format (text) -> this is what the server returns.
 # print(response.json()) -> returns the data as a python dictionary
-print(json.dumps(response.json(), indent=2)) # takes takes dict as input and output as text
+# print(json.dumps(response.json(), indent=2)) # takes takes dict as input and output as text
 # print(json.loads(response.text)) # takes input as text and output as dict

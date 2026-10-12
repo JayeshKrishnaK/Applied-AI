@@ -114,6 +114,7 @@ def file_ops_write_to_csv():
         2. For output line 3 -> As I just passed an empty string for "place", When reading - "place" : "" 
         3. Output line 4 -> Here also my dict didnt contain "place" key, so an empty string is added.
         So if there is no value for a defined Key -> an empty string is added
+        4. There is no scenario for 'district': None
         '''
 
         # writer = csv.DictWriter(file,fieldnames=["name","place"])

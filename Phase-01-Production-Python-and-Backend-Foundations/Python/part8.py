@@ -6,7 +6,7 @@ class MyDescriptor:
         self.fdel = fdel
 
     def __get__(self,instance,owner):
-        if instance is None:
+        if instance is None: # suppose we access via class eg: Student.name, then no instance obj is passed no python.
             return self
         return self.fget(instance)
 
@@ -15,15 +15,15 @@ class MyDescriptor:
             return AttributeError(f"No setter function is defind by your instance {instance}")
         return self.fset(instance,value)
 
-    def setter(self,fset): # it's not setter(self.fget)
+    def setter(self,fset): # it's not setter(self.fget) 
         return MyDescriptor(self.fget,fset,self.fdel) # Don't call with 'self' as python adds it while calling. if added error.
     
-
+# For Inheritance
 class A:
     def helloA(self):
         print(f"Im at A and my self object is {type(self)} \n")
 
-class B(A):
+class B:
     def hello(self):
         # super().hello()
         # A.hello(B())
@@ -33,34 +33,40 @@ class B(A):
 class C(B):
     def hello(self):
         print(f"before super: {type(self)} \n")
+
         # class C(A,B):
+
         # super().hello()
-        # A.hello(B())
-        # A().hello()
+        # A.hello() # As hello is instance , it don't know which instance to pass on
+        # A.helloA(B())
+        # A().helloA()
 
         # class C(B) class B(A) class A
-        # super().hello()
+
+        super().hello()
         
         '''
         Important: Although I don't inherit A, I still able to access beacuse A is in the module's namespace.
         Even if B doesn't inheirt A, I still be able to access A here.
 
-        Important: If I super(), then if I access a function thats only at A and if B doesn't ineherit A (or)
+        # class C(B) class B class A
+        Important: If I super(), then if I access a function thats only at B and if B doesn't ineherit A (or)
         C doesn't inherit A & B, then I can't access A and it's variable & method as __mro__ of this class C won't
         have class A.
         '''
         # B.hello(A()) # It works 
         # A().hello() # It also still works
 
-        # class C(B) class B class A
-        # super().helloA() # fail
+        # class C(B) class B class A 
+        # super().helloA() # fail (<class '__main__.C'>, <class '__main__.B'>, <class 'object'>)
 
         # class C(B) class B(A) class A
-        super().helloA() # Pass ((<class '__main__.C'>, <class '__main__.B'>, <class '__main__.A'>, <class 'object'>))
+        # super().helloA() # Pass ((<class '__main__.C'>, <class '__main__.B'>, <class '__main__.A'>, <class 'object'>))
 
         print(f"after super: {type(self)} \n")
         print("C")
 
+# Operator overloading
 class Income:
     def __init__(self,income):
         self.income = income
@@ -171,18 +177,18 @@ def working_with_class():
     # Family.fav_food("Jayesh")
 
     # Inhertiance play
-    c = C()
+    # c = C()
     # print(C.__mro__) # (<class '__main__.C'>, <class '__main__.A'>, <class '__main__.B'>, <class 'object'>)
     # c.hello()
 
     # Operator overloading
-    Jayesh = Income(70000)
-    print(f"Jayesh's",Jayesh)
+    # Jayesh = Income(70000)
+    # print(f"Jayesh's",Jayesh)
 
-    Kannan = Income(30000)
-    print(f"Kannan's", Kannan)
+    # Kannan = Income(30000)
+    # print(f"Kannan's", Kannan)
 
-    print(f"Total family's",Jayesh + Kannan)
+    # print(f"Total family's",Jayesh + Kannan)
 
 
 def alter_list_inside_tuple():
